@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.concurrent.*;
 
 public class Main {
@@ -12,10 +13,17 @@ public class Main {
         if(files != null){
             int wordCount = 0;
             int lineCount = 0;
+
             ExecutorService service = Executors.newFixedThreadPool(3);
-            for(File file : files){
+            ArrayList<Future<Integer[]>> futureArray = new ArrayList<>();
+
+            for(File file : files) {
                 FileReaderClass obj = new FileReaderClass(file);
                 Future<Integer[]> future = service.submit(obj);
+                futureArray.add(future);
+            }
+
+            for(Future<Integer[]> future : futureArray) {
                 try {
                     Integer[] res = future.get();
                     wordCount += res[0];
@@ -25,6 +33,7 @@ public class Main {
                     e.printStackTrace();
                 }
             }
+
             System.out.println("Total Lines : " + lineCount);
             System.out.println("Total Words : " + wordCount);
             service.shutdown();
