@@ -8,6 +8,7 @@ public class FileReaderClass implements Callable<Integer[]> {
     File file;
     FileReader fr;
     BufferedReader br = null;
+
     FileReaderClass(File file){
         try {
             this.file = file;
@@ -20,10 +21,12 @@ public class FileReaderClass implements Callable<Integer[]> {
     }
 
     public Integer[] call() {
-        System.out.println( file.getName() + " is processed by : " + Thread.currentThread().getName());
+
+//        System.out.println( file.getName() + " is processed by : " + Thread.currentThread().getName());
+//        System.out.println(System.currentTimeMillis()); // to know whether or not threads are concurrently processing the files from the folder
+
         String line;
-        int wordCount = 0;
-        int lineCount = 0;
+        int wordCount = 0, lineCount = 0;
         try {
             while ((line = br.readLine()) != null) {
                 lineCount++;
@@ -45,7 +48,6 @@ public class FileReaderClass implements Callable<Integer[]> {
                 System.out.println("Error in closing the file.");
                 e.printStackTrace();
             }
-            System.out.println(file.getName() + " closed successfully.\n");
         }
         return new Integer[] {wordCount, lineCount};
     }
